@@ -3,6 +3,7 @@ from src.htmlnode import *
 from src.blocktype import BlockType
 from src.textnode import TextNode, TextType
 from src.split_nodes import split_nodes_delimiter
+from src.text_processor import text_to_textnodes
 
 def create_heading_level_and_text(block):
     if block.startswith('#'):
@@ -26,10 +27,7 @@ def create_heading_level_and_text(block):
     return tag, text
 
 def text_to_children(text):
-    text_nodes = [TextNode(text, TextType.TEXT)]
-    text_nodes = split_nodes_delimiter(text_nodes, "**", TextType.BOLD)
-    text_nodes = split_nodes_delimiter(text_nodes, "_", TextType.ITALIC)
-    text_nodes = split_nodes_delimiter(text_nodes, "`", TextType.CODE)
+    text_nodes = text_to_textnodes(text)
     html_nodes = []
     for text_node in text_nodes:
         html_node = TextNode.text_node_to_html_node(text_node)

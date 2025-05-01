@@ -4,6 +4,10 @@ from src.textnode import TextNode, TextType
 import os
 import shutil
 from src.generate_page import generate_page, generate_pages_recursive
+if len(sys.argv) > 1:
+    basepath = sys.argv[1]
+else:
+    basepath = '/'
 
 def copy_and_move_contents(source_path, destination_path):
     if os.path.exists(destination_path):
@@ -20,18 +24,18 @@ def copy_and_move_contents(source_path, destination_path):
             copy_and_move_contents(item_path, new_subdirectory)
 
 def main():
-    if os.path.exists("public"):
-        shutil.rmtree("public")
-    os.makedirs("public")
+    if os.path.exists("docs"):
+        shutil.rmtree("docs")
+    os.makedirs("docs")
     if os.path.exists("static"):
         for item in os.listdir("static"):
             source = os.path.join("static", item)
-            destination = os.path.join("public", item)
+            destination = os.path.join("docs", item)
             if os.path.isdir(source):
                 shutil.copytree(source, destination)
             else:
                 shutil.copy2(source, destination)
-    generate_pages_recursive("content/", "template.html", "public/")
+    generate_pages_recursive("content/", "template.html", "docs/", basepath)
 
 if __name__ == "__main__":
     main()
